@@ -91,8 +91,8 @@ def prune(target):
         for comparing_file in files[idx + 1: len(files)]:
             if filecmp.cmp(primary_file, comparing_file):
                 LOGGER.info("duplicates found: %s and %s are equal; slating %s for removal",
-                            primary_file, comparing_file, primary_file)
-                to_remove.append(primary_file)
+                            primary_file, comparing_file, comparing_file)
+                to_remove.append(comparing_file)
 
     LOGGER.info('Removing %s files...', len(to_remove))
     for file_item in to_remove:
@@ -119,7 +119,7 @@ def fix_names(target):
             copy_file(file_item, os.path.join(folder_name, file_name))
             os.remove(file_item)
         except SameFileError:
-            dup_name = file_name + '_DUP_' + u.get_time_stamp() + idx
+            dup_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
             copy_file(file_item, os.path.join(folder_name, dup_name))
             os.remove(file_item)
 
