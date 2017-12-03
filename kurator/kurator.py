@@ -36,7 +36,7 @@ import os
 import sys
 import filecmp
 import logging
-from shutil import copy2 as copy_file
+from shutil import copy2 as copy_file, SameFileError
 import psycopg2
 from kurator.lib import utils as u
 
@@ -75,7 +75,7 @@ def import_media(source, library):
         try:
             copy_file(file_item, os.path.join(folder_name, file_name))
             print('Processed {} of {}: {}'.format(idx, len(files), file_name))
-        except:
+        except SameFileError:
             dup_name = file_name + '_DUP_' + str(u.get_time_stamp()) + str(idx)
             copy_file(file_item, os.path.join(folder_name, dup_name))
             print('Processed {} of {}: {}'.format(idx, len(files), dup_name))
@@ -113,16 +113,16 @@ def fix_names(target):
         file_name = u.generate_filename_from_meta(file_item)
         u.create_directory(folder_name)
 
-        if 'NO_DATA_' not in file_name and file_item != os.path.join(folder_name, file_name):
-            LOGGER.info('Moving file_item %s to %s',
-                        file_item, os.path.join(folder_name, file_name))
-            try:
-                copy_file(file_item, os.path.join(folder_name, file_name))
-                os.remove(file_item)
-            except 'shutil.Error':
-                dup_name = file_name + '_DUP_' + u.get_time_stamp() + idx
-                copy_file(file_item, os.path.join(folder_name, dup_name))
-                os.remove(file_item)
+        LOGGER.info('Moving file_item %s to %s',
+                    file_item, os.path.join(folder_name, file_name))
+        try:
+            copy_file(file_item, os.path.join(folder_name, file_name))
+            os.remove(file_item)
+        except SameFileError:
+            dup_name = file_name + '_DUP_' + u.get_time_stamp() + idx
+            copy_file(file_item, os.path.join(folder_name, dup_name))
+            os.remove(file_item)
+
 
 if __name__ == "__main__":
     pass

@@ -1,5 +1,5 @@
 import click
-import kurator as k
+import kurator.kurator as k
 
 # -*- coding: utf-8 -*-
 """Example Google style docstrings.
@@ -38,7 +38,7 @@ Todo:
 @click.group()
 def cli():
     """Kurator helps manage photo and video dumps from a device
-    to a photo library. 
+    to a photo library.
 
     A photo library is considered nothing more than a plain folder.
     """
@@ -50,14 +50,14 @@ def cli():
 def import_media(source, library):
     """ Imports media from a source into your library.
 
-    Each image found in the source will be scanned for exif data.  
+    Each image found in the source will be scanned for exif data.
     When copied to your library, it will be renamed using the date
-    taken based on the exif data.  
+    taken based on the exif data.
 
     Each image is placed into the library in a folder based on the date of its
     exif data.  If the folder doesn not already exist, it is created.
 
-    If no exif data exists for the media file, a todays date combined with 
+    If no exif data exists for the media file, a todays date combined with
     "NO_DATA" will be used as the filename.  A folder will be created using
     the same schema.
 
@@ -86,8 +86,8 @@ def prune(target):
 @click.argument('target', type=click.Path(exists=True, file_okay=False, dir_okay=True))
 def fix_names(target):
     """ Rename all files in target using exif data
-    
-    If no exif data exists for the media file, a todays date combined with 
+
+    If no exif data exists for the media file, a todays date combined with
     "NO_DATA" will be used as the filename.
 
     TARGET = the path of the media file folder

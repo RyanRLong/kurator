@@ -5,13 +5,8 @@ root = true
 indent_style = tab
 end_of_line = lf
 charset = utf-8
-<<<<<<< HEAD
-trim_trailing_whitespace = false
-trim_trailing_white_space_on_save = false
-=======
 trim_trailing_whitespace = true
 trim_trailing_white_space_on_save = true
->>>>>>> fc9d4977e8cd94c35d80103db53cd2020c6e9d05
 insert_final_newline = true
 
 [*.md]
