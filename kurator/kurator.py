@@ -38,7 +38,7 @@ import filecmp
 import logging
 from shutil import copy2 as copy_file
 import psycopg2
-from lib import utils as u
+from .lib import utils as u
 
 class NoError(logging.Filter):
     """Only reports items not in Warning, Error, and Critical
@@ -67,18 +67,18 @@ def import_media(source, library):
     """ Imports media from source into library """
 
     files = u.find_all_files(source, ('.jpg', '.mp4', '.mov'))
-    print 'Processing {} photos'.format(len(files))
+    print('Processing {} photos'.format(len(files)))
     for idx, file_item in enumerate(files):
         folder_name = os.path.join(library, u.generate_foldername_from_meta(file_item))
         file_name = u.generate_filename_from_meta(file_item)
         u.create_directory(folder_name)
         try:
             copy_file(file_item, os.path.join(folder_name, file_name))
-            print 'Processed {} of {}: {}'.format(idx, len(files), file_name)
+            print('Processed {} of {}: {}'.format(idx, len(files), file_name))
         except:
             dup_name = file_name + '_DUP_' + str(u.get_time_stamp()) + str(idx)
             copy_file(file_item, os.path.join(folder_name, dup_name))
-            print 'Processed {} of {}: {}'.format(idx, len(files), dup_name)
+            print('Processed {} of {}: {}'.format(idx, len(files), dup_name))
 
 def prune(target):
     """Removes duplicate files from the target"""
@@ -100,14 +100,14 @@ def prune(target):
             LOGGER.info('removing file_item %s', file_item)
             os.remove(file_item)
         else:
-            print 'file_item {} previously removed'.format(file_item)
+            print('file_item {} previously removed'.format(file_item))
 
 def fix_names(target):
     """ Checks that the name of the file_item matches the exif data
     contained in the file_item
     """
     files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
-    print 'Scanning {} photos'.format(len(files))
+    print('Scanning {} photos'.format(len(files)))
     for idx, file_item in enumerate(files):
         folder_name = os.path.join(target, u.generate_foldername_from_meta(file_item))
         file_name = u.generate_filename_from_meta(file_item)
