@@ -37,40 +37,65 @@ Todo:
 """
 @click.group()
 def cli():
-    """ Performs operations on a photo library """
+    """Kurator helps manage photo and video dumps from a device
+    to a photo library. 
+
+    A photo library is considered nothing more than a plain folder.
+    """
     pass
 
 @click.command()
 @click.argument('source', type=click.Path(exists=True, file_okay=False, dir_okay=True))
 @click.argument('library', type=click.Path(exists=True, file_okay=False, dir_okay=True))
 def import_media(source, library):
-    """ Imports media from source into library """
+    """ Imports media from a source into your library.
+
+    Each image found in the source will be scanned for exif data.  
+    When copied to your library, it will be renamed using the date
+    taken based on the exif data.  
+
+    Each image is placed into the library in a folder based on the date of its
+    exif data.  If the folder doesn not already exist, it is created.
+
+    If no exif data exists for the media file, a todays date combined with 
+    "NO_DATA" will be used as the filename.  A folder will be created using
+    the same schema.
+
+    SOURCE = the path of the media you want to import
+
+    LIBRARY = the path of your photo library or any folder
+    """
     k.import_media(source, library)
 
 
 @click.command()
 @click.argument('target', type=click.Path(exists=True, file_okay=False, dir_okay=True))
 def prune(target):
-    """Removes duplicate files from the target"""
+    """Removes duplicate files from the target
+
+    Each file in the target directory is compared to each other file recursively
+    in the same directory.
+
+    If two files are the same, the duplicate is removed.
+
+    TARGET = the path of the media file folder
+    """
     k.prune(target)
 
 @click.command()
 @click.argument('target', type=click.Path(exists=True, file_okay=False, dir_okay=True))
 def fix_names(target):
-    """ Checks that the name of the file_item matches the exif data
-    contained in the file_item
+    """ Rename all files in target using exif data
+    
+    If no exif data exists for the media file, a todays date combined with 
+    "NO_DATA" will be used as the filename.
+
+    TARGET = the path of the media file folder
     """
     k.fix_names(target)
-
-@click.command()
-@click.argument('library', type=click.Path(exists=True, file_okay=False, dir_okay=True))
-def update_database(library):
-    """ Syncs the database with the library """
-    k.update_database(library)
 
 def main():
     cli.add_command(import_media)
     cli.add_command(prune)
     cli.add_command(fix_names)
-    cli.add_command(update_database)
     cli()

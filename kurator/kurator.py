@@ -75,8 +75,8 @@ def import_media(source, library):
         try:
             copy_file(file_item, os.path.join(folder_name, file_name))
             print 'Processed {} of {}: {}'.format(idx, len(files), file_name)
-        except 'shutil.Error':
-            dup_name = file_name + '_DUP_' + u.get_time_stamp() + idx
+        except:
+            dup_name = file_name + '_DUP_' + str(u.get_time_stamp()) + str(idx)
             copy_file(file_item, os.path.join(folder_name, dup_name))
             print 'Processed {} of {}: {}'.format(idx, len(files), dup_name)
 
