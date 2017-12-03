@@ -8,6 +8,7 @@ from shutil import rmtree
 
 class UtilsTest(TestCase):
     def setUp(self):
+        print(dir(k))
         self.dir_path = os.path.dirname(os.path.realpath(__file__))
         self.fixtures = os.path.join(self.dir_path, './fixtures')
         self.test_file = os.path.join(self.fixtures, 'IMG_0234.jpg')
