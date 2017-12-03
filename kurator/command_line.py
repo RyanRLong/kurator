@@ -74,4 +74,3 @@ def main():
     cli.add_command(fix_names)
     cli.add_command(update_database)
     cli()
->>>>>>> fc9d4977e8cd94c35d80103db53cd2020c6e9d05
