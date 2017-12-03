@@ -46,6 +46,7 @@ jobs:
             . venv/bin/activate
             nosetests -w kurator --cover-branches --with-coverage --cover-erase --with-doctest --cover-html -I -vv
 
+
       - store_artifacts:
           path: test-reports
           destination: test-reports
