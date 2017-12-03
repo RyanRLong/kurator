@@ -38,7 +38,7 @@ import filecmp
 import logging
 from shutil import copy2 as copy_file
 import psycopg2
-from .lib import utils as u
+from lib import utils as u
 
 class NoError(logging.Filter):
     """Only reports items not in Warning, Error, and Critical
