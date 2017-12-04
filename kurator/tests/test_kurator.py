@@ -46,6 +46,7 @@ class FixNames(TestCase):
         k.fix_names(self.library)
 
     def tearDown(self):
+        pass
         if os.path.isdir(self.library):
             rmtree(self.library)
 
@@ -56,7 +57,4 @@ class FixNames(TestCase):
 
     def test_fix_names_recognizes_files_with_no_meta_data(self):
         self.assertTrue(os.path.isdir(os.path.join(self.library, 'no_data_')))
-
-
-
 

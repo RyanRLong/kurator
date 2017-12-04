@@ -37,7 +37,6 @@ import sys
 import filecmp
 import logging
 from shutil import copy2 as copy_file, SameFileError
-import psycopg2
 from kurator.lib import utils as u
 
 class NoError(logging.Filter):
@@ -113,16 +112,10 @@ def fix_names(target):
         file_name = u.generate_filename_from_meta(file_item)
         u.create_directory(folder_name)
 
-        LOGGER.info('Moving file_item %s to %s',
-                    file_item, os.path.join(folder_name, file_name))
-        try:
-            copy_file(file_item, os.path.join(folder_name, file_name))
-            os.remove(file_item)
-        except SameFileError:
-            dup_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
-            copy_file(file_item, os.path.join(folder_name, dup_name))
-            os.remove(file_item)
-
+        if os.path.exists(os.path.join(folder_name, file_name)):
+            file_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
+        copy_file(file_item, os.path.join(folder_name, file_name))
+        os.remove(file_item)
 
 if __name__ == "__main__":
     pass
