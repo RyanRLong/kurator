@@ -60,7 +60,7 @@ class FixNames(TestCase):
 
     def test_fix_names_puts_dups_alongside_originals(self):
         # Should have one DUP returned
-        test = [file for file in glob.glob(self.library + '\*\*DUP*')]
+        test = [file for file in glob.glob(os.path.join(self.library, '*', '*DUP*'))]
         self.assertEqual(len(test), 1)
 
 
