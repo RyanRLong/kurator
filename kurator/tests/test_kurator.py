@@ -4,6 +4,7 @@ from unittest import TestCase
 import kurator.kurator as k
 import os
 import re
+import glob
 from shutil import rmtree
 from distutils.dir_util import copy_tree
 
@@ -46,7 +47,6 @@ class FixNames(TestCase):
         k.fix_names(self.library)
 
     def tearDown(self):
-        pass
         if os.path.isdir(self.library):
             rmtree(self.library)
 
@@ -57,4 +57,10 @@ class FixNames(TestCase):
 
     def test_fix_names_recognizes_files_with_no_meta_data(self):
         self.assertTrue(os.path.isdir(os.path.join(self.library, 'no_data_')))
+
+    # def test_fix_names_puts_dups_alongside_originals(self):
+    #     for file in glob.glob(os.path.join(self.fixtures, '*DUP*')):
+    #         print(file)
+    #     self.assertTrue(False)
+
 
