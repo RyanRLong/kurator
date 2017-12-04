@@ -23,14 +23,14 @@ class ImportMedia(TestCase):
         if os.path.isdir(self.library):
             rmtree(self.library)
 
-
-    def test_import_media_imports_created_all_folders(self):
-        self.assertTrue(os.path.isdir(os.path.join(self.library, '20140201')))
-        self.assertTrue(os.path.isdir(os.path.join(self.library, '20160322')))
-        self.assertTrue(os.path.isdir(os.path.join(self.library, '20171019')))
+    def test_import_media_imports_created_all_folders_and_files(self):
+        self.assertTrue(os.path.exists(os.path.join(self.library, '20140201', '20140201-165116.jpg')))
+        self.assertTrue(os.path.exists(os.path.join(self.library, '20160322', '20160322-120505.jpg')))
+        self.assertTrue(os.path.exists(os.path.join(self.library, '20171019', '20171019-125142.jpg')))
 
     def test_import_media_recognizes_files_with_no_meta_data(self):
-        self.assertTrue(os.path.isdir(os.path.join(self.library, 'no_data_')))
+        test = [file for file in glob.glob(os.path.join(self.library, 'no_data_', 'NO_DATA_*'))]
+        self.assertEqual(len(test), 1)
 
 
 class FixNames(TestCase):
@@ -58,9 +58,9 @@ class FixNames(TestCase):
     def test_fix_names_recognizes_files_with_no_meta_data(self):
         self.assertTrue(os.path.isdir(os.path.join(self.library, 'no_data_')))
 
-    # def test_fix_names_puts_dups_alongside_originals(self):
-    #     for file in glob.glob(os.path.join(self.fixtures, '*DUP*')):
-    #         print(file)
-    #     self.assertTrue(False)
+    def test_fix_names_puts_dups_alongside_originals(self):
+        # Should have one DUP returned
+        test = [file for file in glob.glob(self.library + '\*\*DUP*')]
+        self.assertEqual(len(test), 1)
 
 
