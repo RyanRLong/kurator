@@ -80,7 +80,7 @@ class Prune(TestCase):
         self.assertTrue(os.path.exists(os.path.join(self.library, 'IMG_0625 - Copy.JPG')))
         self.assertTrue(os.path.exists(os.path.join(self.library, 'IMG_0234.jpg')))
         self.assertTrue(os.path.exists(os.path.join(self.library, 'IMG_1329.JPG')))
-        self.assertTrue(os.path.exists(os.path.join(self.library, 'NO_DATA.JPG')))
+        self.assertTrue(os.path.exists(os.path.join(self.library, 'NO_DATA.jpg')))
 
 
 
