@@ -42,7 +42,7 @@ def cli():
 
     A photo library is considered nothing more than a plain folder.
     """
-    pass
+    pass # pragma: no cover
 
 @click.command()
 @click.argument('source', type=click.Path(exists=True, file_okay=False, dir_okay=True))
@@ -65,7 +65,7 @@ def import_media(source, library):
 
     LIBRARY = the path of your photo library or any folder
     """
-    k.import_media(source, library)
+    k.import_media(source, library) # pragma: no cover
 
 
 @click.command()
@@ -80,7 +80,7 @@ def prune(target):
 
     TARGET = the path of the media file folder
     """
-    k.prune(target)
+    k.prune(target) # pragma: no cover
 
 @click.command()
 @click.argument('target', type=click.Path(exists=True, file_okay=False, dir_okay=True))
@@ -92,10 +92,10 @@ def fix_names(target):
 
     TARGET = the path of the media file folder
     """
-    k.fix_names(target)
+    k.fix_names(target) # pragma: no cover
 
 def main():
-    cli.add_command(import_media)
-    cli.add_command(prune)
-    cli.add_command(fix_names)
-    cli()
+    cli.add_command(import_media) # pragma: no cover
+    cli.add_command(prune) # pragma: no cover
+    cli.add_command(fix_names) # pragma: no cover
+    cli() # pragma: no cover

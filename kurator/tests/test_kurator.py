@@ -12,9 +12,8 @@ class ImportMedia(TestCase):
     def setUp(self):
         self.dir_path = os.path.dirname(os.path.realpath(__file__))
         self.fixtures = os.path.join(self.dir_path, './fixtures')
-        self.test_file = os.path.join(self.fixtures, 'IMG_0234.jpg')
+        self.library = os.path.join(self.dir_path, 'import_media_test')
 
-        self.library = os.path.join(self.dir_path, 'library')
         if not os.path.isdir(self.library):
             os.mkdir(self.library)
         k.import_media(self.dir_path, self.library)
@@ -37,11 +36,9 @@ class FixNames(TestCase):
     def setUp(self):
         self.dir_path = os.path.dirname(os.path.realpath(__file__))
         self.fixtures = os.path.join(self.dir_path, './fixtures')
-        self.test_file = os.path.join(self.fixtures, 'IMG_0234.jpg')
-        self.library = os.path.join(self.dir_path, 'library_fix_name_test')
+        self.library = os.path.join(self.dir_path, 'fix_name_test')
 
         if not os.path.isdir(self.library):
-            print("making lib")
             os.mkdir(self.library)
         copy_tree(self.fixtures, self.library)
         k.fix_names(self.library)
@@ -62,5 +59,28 @@ class FixNames(TestCase):
         # Should have one DUP returned
         test = [file for file in glob.glob(os.path.join(self.library, '*', '*DUP*'))]
         self.assertEqual(len(test), 1)
+
+class Prune(TestCase):
+    def setUp(self):
+        self.dir_path = os.path.dirname(os.path.realpath(__file__))
+        self.fixtures = os.path.join(self.dir_path, './fixtures')
+        self.library = os.path.join(self.dir_path, 'prune_test')
+
+        if not os.path.isdir(self.library):
+            os.mkdir(self.library)
+        copy_tree(self.fixtures, self.library)
+        k.prune(self.library)
+
+    def tearDown(self):
+        if os.path.isdir(self.library):
+            rmtree(self.library)
+
+    def test_fix_names_recognizes_files_with_no_meta_data(self):
+        self.assertTrue(not os.path.exists(os.path.join(self.library, 'prune_test', 'IMG_0234.jpg')))
+        self.assertTrue(os.path.exists(os.path.join(self.library, 'IMG_0625 - Copy.JPG')))
+        self.assertTrue(os.path.exists(os.path.join(self.library, 'IMG_0234.jpg')))
+        self.assertTrue(os.path.exists(os.path.join(self.library, 'IMG_1329.JPG')))
+        self.assertTrue(os.path.exists(os.path.join(self.library, 'NO_DATA.JPG')))
+
 
 
