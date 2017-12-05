@@ -85,7 +85,7 @@ def prune(target):
 @click.command()
 @click.argument('target', type=click.Path(exists=True, file_okay=False, dir_okay=True))
 def fix_names(target):
-    """ Rename all files in target using exif data
+    """ Rename all files in target using exif data (ie 20140201-165116.jpg)
 
     If no exif data exists for the media file, a todays date combined with
     "NO_DATA" will be used as the filename.
