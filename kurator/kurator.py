@@ -63,6 +63,10 @@ HANDLER_STDERR.setFormatter(FORMATTER)
 LOGGER.addHandler(HANDLER_STDOUT)
 LOGGER.addHandler(HANDLER_STDERR)
 
+# Disable exif logging
+EXIF_LOGGER = logging.getLogger('exifread')
+EXIF_LOGGER.setLevel(logging.ERROR)
+
 def import_media(source, library):
     """ Imports media from source into library """
     files = u.find_all_files(source, ('.jpg', '.mp4', '.mov'))
@@ -107,6 +111,7 @@ def fix_names(target):
         folder_name = os.path.join(target, u.generate_foldername_from_meta(file_item))
         file_name = u.generate_filename_from_meta(file_item)
         u.create_directory(folder_name)
+        LOGGER.info('Processing file %s', file_name)
 
         if os.path.exists(os.path.join(folder_name, file_name)):
             file_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
