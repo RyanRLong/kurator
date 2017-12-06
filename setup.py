@@ -1,11 +1,11 @@
 from setuptools import setup
 
 setup(name='kurator',
-      version='0.2',
+      version='0.3',
       description='Command line tool to help with media dumps',
       keywords=['media','dump','file','transfer','exif','photos','images','duplicate','rename'],
       url='http://github.com/saltycatfish/kurator',
-      download_url = 'https://github.com/saltycatfish/kurator/archive/0.2.tar.gz',
+      download_url = 'https://github.com/saltycatfish/kurator/archive/0.3.tar.gz',
       author='SaltyCatFish',
       author_email='ryan@saltycatfish.com',
       license='MIT',

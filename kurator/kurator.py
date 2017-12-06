@@ -63,6 +63,10 @@ HANDLER_STDERR.setFormatter(FORMATTER)
 LOGGER.addHandler(HANDLER_STDOUT)
 LOGGER.addHandler(HANDLER_STDERR)
 
+# Disable exif logging
+EXIF_LOGGER = logging.getLogger('exifread')
+EXIF_LOGGER.setLevel(logging.ERROR)
+
 def import_media(source, library):
     """ Imports media from source into library """
 
@@ -103,13 +107,13 @@ def fix_names(target):
     """ Checks that the name of the file_item matches the exif data
     contained in the file_item
     """
-    raw_files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
-    files = (file for file in raw_files)
-    print('Scanning {} photos'.format(len(raw_files)))
+    files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
+    print('Scanning {} photos'.format(len(files)))
     for idx, file_item in enumerate(files):
         folder_name = os.path.join(target, u.generate_foldername_from_meta(file_item))
         file_name = u.generate_filename_from_meta(file_item)
         u.create_directory(folder_name)
+        LOGGER.info('Processing file %s', file_name)
 
         if os.path.exists(os.path.join(folder_name, file_name)):
             file_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
