@@ -21,8 +21,9 @@ Removes duplicate files, comparing the files **contents**, not file names.  Prun
 ## fix_names
 
 `Usage: kurator fix_names [OPTIONS] TARGET`
-Renames all media files in the `TARGET` directory according to the naming schema in **import_media**.
+Renames all media files in the `TARGET` directory according to the naming schema in **import_media**.  Duplicate names will be preserved, with the duplicate having its name appended with \_DUP_<TIMESTAMP>.
 
+ryan@saltycatfish.com
 *Worker with wrench designed by www.slon.pics / Freepik.  Thanks!*
 
 
