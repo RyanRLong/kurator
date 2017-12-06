@@ -37,6 +37,7 @@ import sys
 import filecmp
 import logging
 from shutil import copy2 as copy_file, SameFileError
+
 from kurator.lib import utils as u
 
 class NoError(logging.Filter):
@@ -70,13 +71,10 @@ def import_media(source, library):
         folder_name = os.path.join(library, u.generate_foldername_from_meta(file_item))
         file_name = u.generate_filename_from_meta(file_item)
         u.create_directory(folder_name)
-        try:
-            copy_file(file_item, os.path.join(folder_name, file_name))
-            print('Processed {} of {}: {}'.format(idx, len(files), file_name))
-        except SameFileError:
-            dup_name = file_name + '_DUP_' + str(u.get_time_stamp()) + str(idx)
-            copy_file(file_item, os.path.join(folder_name, dup_name))
-            print('Processed {} of {}: {}'.format(idx, len(files), dup_name))
+
+        if os.path.exists(os.path.join(folder_name, file_name)):
+            file_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
+        copy_file(file_item, os.path.join(folder_name, file_name))
 
 def prune(target):
     """Removes duplicate files from the target"""
