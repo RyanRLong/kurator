@@ -2,7 +2,8 @@ from setuptools import setup
 
 setup(name='kurator',
       version='0.1',
-      description='Command line tool for organizing photos',
+      description='Command line tool to help with media dumps',
+      keywords=['media','dump','file','transfer','exif','photos','images','duplicate','rename']
       url='http://github.com/saltycatfish/kurator',
       author='SaltyCatFish',
       author_email='ryan@saltycatfish.com',
