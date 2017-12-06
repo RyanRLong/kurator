@@ -9,7 +9,7 @@ setup(name='kurator',
       author='SaltyCatFish',
       author_email='ryan@saltycatfish.com',
       license='MIT',
-      packages=['kurator'],
+      packages=['kurator', 'lib'],
       install_requires=[
         'click==6.7',
         'ExifRead==2.1.2',
