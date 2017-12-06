@@ -75,12 +75,11 @@ class Prune(TestCase):
         if os.path.isdir(self.library):
             rmtree(self.library)
 
-    def test_fix_names_recognizes_files_with_no_meta_data(self):
+    def test_prune_removes_only_duplicate_files(self):
         self.assertTrue(not os.path.exists(os.path.join(self.library, 'prune_test', 'IMG_0234.jpg')))
         self.assertTrue(os.path.exists(os.path.join(self.library, 'IMG_0625 - Copy.JPG')))
         self.assertTrue(os.path.exists(os.path.join(self.library, 'IMG_0234.jpg')))
-        self.assertTrue(os.path.exists(os.path.join(self.library, 'IMG_1329.JPG')))
-        self.assertTrue(os.path.exists(os.path.join(self.library, 'NO_DATA.jpg')))
+
 
 
 

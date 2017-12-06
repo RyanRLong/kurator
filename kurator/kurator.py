@@ -103,8 +103,9 @@ def fix_names(target):
     """ Checks that the name of the file_item matches the exif data
     contained in the file_item
     """
-    files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
-    print('Scanning {} photos'.format(len(files)))
+    raw_files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
+    files = (file for file in raw_files)
+    print('Scanning {} photos'.format(len(raw_files)))
     for idx, file_item in enumerate(files):
         folder_name = os.path.join(target, u.generate_foldername_from_meta(file_item))
         file_name = u.generate_filename_from_meta(file_item)
