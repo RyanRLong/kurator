@@ -64,7 +64,6 @@ LOGGER.addHandler(HANDLER_STDERR)
 
 def import_media(source, library):
     """ Imports media from source into library """
-
     files = u.find_all_files(source, ('.jpg', '.mp4', '.mov'))
     print('Processing {} photos'.format(len(files)))
     for idx, file_item in enumerate(files):
@@ -81,7 +80,6 @@ def import_media(source, library):
 
 def prune(target):
     """Removes duplicate files from the target"""
-
     files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
     LOGGER.info('Scanning %s files...', len(files))
 
