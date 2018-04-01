@@ -5,7 +5,7 @@ import pytest
 
 from kurator.lib.record import SqliteRecord
 
-DB_NAME = 'test_mesh_records.db'
+DB_NAME = SqliteRecord.DATABASE_NAME
 
 
 class Test_Record:
@@ -23,44 +23,39 @@ class Test_Record:
     @pytest.fixture
     def add_records(self):
         self.cursor.execute("""
-        INSERT OR REPLACE INTO Updates (
-            'update_id',
-            'ticket_key',
-            'ticket_id',
-            'file_name',
-            'author',
-            'size',
-            'created',
-            'status',
-            'executed'
+        INSERT INTO {} (
+            'id',
+            'created_date',
+            'model',
+            'orientation',
+            'path',
+            'imported_date'
         ) VALUES 
-            ("43462","AN-5443","65733","file1.sql","Chris","299","2018-03-07T10:51:15.237-0500","Done",0),
-            ("43428","AN-5403","65646","file2.sql","Sean","117","2018-03-05T13:10:46.215-0500","Review",0),
-            ("43299","AN-5388","65623","file3.sql","Chris","21","2018-02-23T09:58:18.837-0500","Doing",0),
-            ("43235","AN-5360","65567","file4.sql","Michael","1336","2018-02-16T15:50:11.462-0500","Done",1),
-            ("43210","AN-5351","65551","file5.sql","Michael","1334","2018-02-15T16:17:55.255-0500","Done",1)
-        """)
+            ("e602f0f61e8d785377d2e7478e3a2131","2014:05:29 14:58:25","iPhone 4S","unknown","x:HomeMedia\Pictures\20140529\20140529-145825.jpg","2018-03-31 21:11:14.321210"),
+            ("ec5a49dfb727e695cf098d9ef342c5f1","2017:12:20 09:57:35","iPhone 5s","Rotated 90 CW","x:HomeMedia\Pictures\20171220\20171220-095735.jpg","2018-03-31 21:11:14.417798"),
+            ("b02a86a6b2e82b52f46b0a2b4a4c0828","2017:12:20 09:37:14","iPhone 5s","Rotated 90 CW","x:HomeMedia\Pictures\20171220\20171220-093714.jpg","2018-03-31 21:11:14.541881"),
+            ("cfbcf0c547f1b916b7007d013a836f06","2017:12:20 09:57:38","iPhone 5s","Rotated 90 CW","x:HomeMedia\Pictures\20171220\20171220-095738.jpg","2018-03-31 21:11:14.662481")
+        """).format(SqliteRecord.TABLE_NAME)
         self.connection.commit()
 
-    @pytest.mark.skip(reason="not implemented")
+
     def test_create_photos_table(self):
-        self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name={};".format(SqliteRecord.DATABASE_NAME))
+        # table is created on instantiation
+        self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='{}';".format(SqliteRecord.TABLE_NAME))
         assert len(self.cursor.fetchall()) == 1
         self.record.close()
 
-    @pytest.mark.skip(reason="not implemented")
     def test_create_record(self):
+        self.cursor.execute("SELECT count(*) from {}".format(SqliteRecord.TABLE_NAME))
+        assert self.cursor.fetchone()[0] == 0
         self.record.create_record({
-            'file_id': 1234,
-            'ticket_key': 'AN-1234',
-            'ticket_id': 4567,
-            'file_name': 'file_name',
-            'author': 'name',
-            'size': 500,
-            'created': '2018-01-01',
-            'ticket_status': 'Done',
+            'id': 'e602f0f61e8d785377d2e7478e3a2131',
+            'created_date': '2014:05:29 14:58:25',
+            'model': 'iphone 4s',
+            'orientation': 'unknown',
+            'file_path': 'x:HomeMedia\\Pictures\\20140529\\20140529-145825.jpg',
         })
-        self.cursor.execute("SELECT count(*) from Updates")
+        self.cursor.execute("SELECT count(*) from {}".format(SqliteRecord.TABLE_NAME))
         assert self.cursor.fetchone()[0] == 1
         self.record.close()
 

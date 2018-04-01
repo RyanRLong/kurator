@@ -12,7 +12,6 @@ class UtilsTest(TestCase):
         self.test_file = os.path.join(self.fixtures, 'IMG_0234.jpg')
 
     def test_find_all_files_finds_all_jpgs(self):
-        print(self.fixtures)
         test = len(utils.find_all_files(self.fixtures, ('jpg')))
         expect = 4
         self.assertEqual(test, expect)
@@ -25,10 +24,10 @@ class UtilsTest(TestCase):
     def test_get_file_tags_returns_all_tags(self):
         test = utils.get_file_tags(self.test_file)
         expect = {
-            'dateTime': '2017:10:19 12:51:42',
+            'created_date': '2017:10:19 12:51:42',
             'model': 'SM-G935V', 'orientation': 'Horizontal (normal)'
         }
-        self.assertEquals(test['dateTime'], expect['dateTime'])
+        self.assertEquals(test['created_date'], expect['created_date'])
         self.assertEquals(test['model'], expect['model'])
 
     def test_generate_filename_from_meta_generates_correct_filename(self):

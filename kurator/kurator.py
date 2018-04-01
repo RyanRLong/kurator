@@ -16,6 +16,7 @@ class NoError(logging.Filter):
     """
     Only reports items not in Warning, Error, and Critical
     """
+
     def filter(self, record):
         return record.levelname not in ['WARNING', 'ERROR', 'CRITICAL']
 
@@ -55,10 +56,9 @@ def import_media(source, library):
         if os.path.exists(os.path.join(folder_name, file_name)):
             file_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
         file_destination = os.path.join(folder_name, file_name)
-        copy_file(file_item, file_destination)
-
-        media_id = u.generate_md5(file_destination)
-        create_record_if_not_exist(media_id, file_destination)
+        media_id = u.generate_md5(file_item)
+        if create_record_if_not_exist(media_id, file_destination) is True:
+            copy_file(file_item, file_destination)
 
 
 def create_record_if_not_exist(media_id, file_path):
@@ -73,12 +73,14 @@ def create_record_if_not_exist(media_id, file_path):
         record_data = u.get_file_tags(file_path)
         record_data['media_id'] = media_id
         record.create_record(record_data)
+        return True
     else:
-        print("Record {} exists".format(media_id))
+        return False
 
 
 def prune(target):
     """
+    TODO: Needs to be re-written or may not be necessary
     Removes duplicate files from the target
     :param target:
     :return:

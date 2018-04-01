@@ -67,10 +67,15 @@ class SqliteRecord():
         self.cursor.execute(sql)
         self.connection.commit()
 
-    def record_exists(self, id):
+    def record_exists(self, media_id):
+        """
+        Returns true if record exists
+        :param media_id:
+        :return:
+        """
         sql = """
         SELECT id FROM {} WHERE id = '{}' LIMIT 1;
-        """.format(SqliteRecord.TABLE_NAME, id)
+        """.format(SqliteRecord.TABLE_NAME, media_id)
         self.cursor.execute(sql)
         return self.cursor.fetchone() is not None
 
@@ -82,7 +87,7 @@ class SqliteRecord():
         :return:
         """
         sql = """
-        INSERT OR REPLACE INTO {} (
+        INSERT INTO {} (
             'id',
             'created_date',
             'model',
@@ -91,7 +96,7 @@ class SqliteRecord():
             'imported_date'
         ) VALUES (
             '{id}',
-            '{created_Date}',
+            '{created_date}',
             '{model}',
             '{orientation}',
             '{path}',
@@ -100,10 +105,10 @@ class SqliteRecord():
         """.format(
             SqliteRecord.TABLE_NAME,
             id=data['id'],
-            created_Date=data['dateTime'],
+            created_date=data['created_date'],
             model=data['model'],
             orientation=data['orientation'],
-            path=data['fileName'],
+            path=data['file_path'],
             imported_date=datetime.datetime.now(),
         )
         self.cursor.execute(sql)
