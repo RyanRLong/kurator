@@ -58,7 +58,6 @@ class UtilsTest(TestCase):
         self.assertEqual(test, expect)
 
     def test_get_date_string_or_returns_default_date_string(self):
-        print(dir(utils))
         test = bool(re.search('\d{4}-\d{2}-\d{2}', utils.get_date_string_or('XYZ')))
         self.assertTrue(test)
 
