@@ -94,8 +94,21 @@ def fix_names(target):
     """
     k.fix_names(target) # pragma: no cover
 
+@click.command()
+@click.argument('target', type=click.Path(exists=True, file_okay=False, dir_okay=True))
+def import_to_database(target):
+    """ Rename all files in target using exif data (ie 20140201-165116.jpg)
+
+    If no exif data exists for the media file, a todays date combined with
+    "NO_DATA" will be used as the filename.
+
+    TARGET = the path of the media file folder
+    """
+    k.import_to_database(target) # pragma: no cover
+
 def main():
     cli.add_command(import_media) # pragma: no cover
     cli.add_command(prune) # pragma: no cover
     cli.add_command(fix_names) # pragma: no cover
+    cli.add_command(import_to_database)
     cli() # pragma: no cover

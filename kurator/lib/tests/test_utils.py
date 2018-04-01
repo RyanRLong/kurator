@@ -1,7 +1,7 @@
 # pylint: disable-all
 from unittest import TestCase
 
-import utils
+import kurator.lib.utils as utils
 import os
 import re
 
@@ -10,10 +10,6 @@ class UtilsTest(TestCase):
         self.dir_path = os.path.dirname(os.path.realpath(__file__))
         self.fixtures = os.path.join(self.dir_path, './fixtures')
         self.test_file = os.path.join(self.fixtures, 'IMG_0234.jpg')
-
-    def test(self):
-        print(utils)
-        self.assertEqual(3, 3)
 
     def test_find_all_files_finds_all_jpgs(self):
         print(self.fixtures)
