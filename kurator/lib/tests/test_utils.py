@@ -1,7 +1,7 @@
 # pylint: disable-all
 from unittest import TestCase
 
-import utils
+import kurator.lib.utils as utils
 import os
 import re
 
@@ -11,15 +11,10 @@ class UtilsTest(TestCase):
         self.fixtures = os.path.join(self.dir_path, './fixtures')
         self.test_file = os.path.join(self.fixtures, 'IMG_0234.jpg')
 
-    def test(self):
-        print(utils)
-        self.assertEqual(3, 3)
-
     def test_find_all_files_finds_all_jpgs(self):
-        print(self.fixtures)
         test = len(utils.find_all_files(self.fixtures, ('jpg')))
         expect = 4
-        self.assertEqual(test, expect)
+        assert test == expect
 
     def test_get_time_stamp_returns_string(self):
         test = bool(re.search('\d{10}', utils.get_time_stamp()))
@@ -29,10 +24,10 @@ class UtilsTest(TestCase):
     def test_get_file_tags_returns_all_tags(self):
         test = utils.get_file_tags(self.test_file)
         expect = {
-            'dateTime': '2017:10:19 12:51:42',
+            'created_date': '2017:10:19 12:51:42',
             'model': 'SM-G935V', 'orientation': 'Horizontal (normal)'
         }
-        self.assertEquals(test['dateTime'], expect['dateTime'])
+        self.assertEquals(test['created_date'], expect['created_date'])
         self.assertEquals(test['model'], expect['model'])
 
     def test_generate_filename_from_meta_generates_correct_filename(self):
@@ -62,7 +57,6 @@ class UtilsTest(TestCase):
         self.assertEqual(test, expect)
 
     def test_get_date_string_or_returns_default_date_string(self):
-        print(dir(utils))
         test = bool(re.search('\d{4}-\d{2}-\d{2}', utils.get_date_string_or('XYZ')))
         self.assertTrue(test)
 

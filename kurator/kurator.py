@@ -1,50 +1,25 @@
-"""Kurator.py
-
-This module demonstrates documentation as specified by the `Google Python
-Style Guide`_. Docstrings may extend over multiple lines. Sections are created
-with a section header and a colon followed by a block of indented text.
-
-Example:
-    Examples can be given using either the ``Example`` or ``Examples``
-    sections. Sections support any reStructuredText formatting, including
-    literal blocks::
-
-        $ python example_google.py
-
-Section breaks are created by resuming unindented text. Section breaks
-are also implicitly created anytime a new section starts.
-
-Attributes:
-    module_level_variable1 (int): Module level variables may be documented in
-        either the ``Attributes`` section of the module docstring, or in an
-        inline docstring immediately following the variable.
-
-        Either form is acceptable, but the two should not be mixed. Choose
-        one convention to document module level variables and be consistent
-        with it.
-
-Todo:
-    * For module TODOs
-    * You have to also use ``sphinx.ext.todo`` extension
-
-.. _Google Python Style Guide:
-   http://google.github.io/styleguide/pyguide.html
-
 """
-
-import os
-import sys
+Kurator.py
+"""
+# pylint: disable=too-few-public-methods
 import filecmp
 import logging
-from shutil import copy2 as copy_file, SameFileError
+import os
+import sys
+from shutil import copy2 as copy_file
 
 from kurator.lib import utils as u
+from kurator.lib.record import SqliteRecord
+
 
 class NoError(logging.Filter):
-    """Only reports items not in Warning, Error, and Critical
     """
+    Only reports items not in Warning, Error, and Critical
+    """
+
     def filter(self, record):
-        return not record.levelname in ['WARNING', 'ERROR', 'CRITICAL']
+        return record.levelname not in ['WARNING', 'ERROR', 'CRITICAL']
+
 
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
@@ -67,8 +42,10 @@ LOGGER.addHandler(HANDLER_STDERR)
 EXIF_LOGGER = logging.getLogger('exifread')
 EXIF_LOGGER.setLevel(logging.ERROR)
 
+
 def import_media(source, library):
     """ Imports media from source into library """
+
     files = u.find_all_files(source, ('.jpg', '.mp4', '.mov'))
     print('Processing {} photos'.format(len(files)))
     for idx, file_item in enumerate(files):
@@ -78,10 +55,37 @@ def import_media(source, library):
 
         if os.path.exists(os.path.join(folder_name, file_name)):
             file_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
-        copy_file(file_item, os.path.join(folder_name, file_name))
+        file_destination = os.path.join(folder_name, file_name)
+        media_id = u.generate_md5(file_item)
+        if create_record_if_not_exist(media_id, file_destination) is True:
+            copy_file(file_item, file_destination)
+
+
+def create_record_if_not_exist(media_id, file_path):
+    """
+    Creates a new record in the database
+    :param media_id:
+    :param file_path: absolute path
+    :return:
+    """
+    record = SqliteRecord()
+    if not record.record_exists(media_id):
+        record_data = u.get_file_tags(file_path)
+        record_data['media_id'] = media_id
+        record.create_record(record_data)
+        return True
+    else:
+        return False
+
 
 def prune(target):
-    """Removes duplicate files from the target"""
+    """
+    TODO: Needs to be re-written or may not be necessary
+    Removes duplicate files from the target
+    :param target:
+    :return:
+    """
+
     files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
     LOGGER.info('Scanning %s files...', len(files))
 
@@ -101,9 +105,14 @@ def prune(target):
         else:
             print('file_item {} previously removed'.format(file_item))
 
+
 def fix_names(target):
-    """ Checks that the name of the file_item matches the exif data
+    """
+    Checks that the name of the file_item matches the exif data
     contained in the file_item
+
+    :param target:
+    :return:
     """
     files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
     print('Scanning {} photos'.format(len(files)))
@@ -117,6 +126,24 @@ def fix_names(target):
             file_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
         copy_file(file_item, os.path.join(folder_name, file_name))
         os.remove(file_item)
+
+
+def import_to_database(target):
+    """
+    Imports all media data in target to database
+    :param target:
+    :return:
+    """
+    files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
+    print('Scanning {} photos'.format(len(files)))
+    for file_item in files:
+        folder_name = os.path.join(target, u.generate_foldername_from_meta(file_item))
+        file_name = u.generate_filename_from_meta(file_item)
+        if os.path.exists(os.path.join(folder_name, file_name)):
+            file_path = os.path.join(folder_name, file_name)
+            media_id = u.generate_md5(file_path)
+            create_record_if_not_exist(media_id, file_path)
+
 
 if __name__ == "__main__":
     pass
