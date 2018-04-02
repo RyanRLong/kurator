@@ -3,14 +3,14 @@ Module containing sqlite abstract and concrete classes.
 """
 import sqlite3
 import os
+from pathlib import Path
 import datetime
 
 class SqliteRecord():
     """
     Represents a Sqlite Database of updates
     """
-
-    DATABASE_PATH = os.path.join(os.getenv('LOCALAPPDATA'), 'Kurator')
+    DATABASE_PATH = os.path.join(str(Path.home()), 'Kurator')
     DATABASE_NAME = 'kurator.db'
     TABLE_NAME = 'photos'
 
