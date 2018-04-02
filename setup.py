@@ -21,6 +21,8 @@ setup(name='kurator',
           'six==1.11.0',
           'click==6.7',
       ],
+      setup_requires=['pytest-runner'],
+      test_requires=['pytest', 'pytest-cov'],
       entry_points={
           'console_scripts': ['kurator=kurator.command_line:main'],
       },
