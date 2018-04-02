@@ -14,7 +14,7 @@ class UtilsTest(TestCase):
     def test_find_all_files_finds_all_jpgs(self):
         test = len(utils.find_all_files(self.fixtures, ('jpg')))
         expect = 4
-        self.assertEqual(test, expect)
+        assert test == expect
 
     def test_get_time_stamp_returns_string(self):
         test = bool(re.search('\d{10}', utils.get_time_stamp()))

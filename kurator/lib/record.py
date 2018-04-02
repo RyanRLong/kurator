@@ -35,7 +35,7 @@ class SqliteRecord():
         """
         if not db_path or db_path is None:
             db_dir = SqliteRecord.DATABASE_PATH
-            if not os.path.exists(db_dir):
+            if not os.path.exists(db_dir): # pragma: no cover
                 os.makedirs(db_dir)
             db_path = os.path.join(db_dir, SqliteRecord.DATABASE_NAME)
         return db_path
@@ -111,57 +111,5 @@ class SqliteRecord():
             path=data['file_path'],
             imported_date=datetime.datetime.now(),
         )
-        self.cursor.execute(sql)
-        self.connection.commit()
-
-    def fetch_not_executed_updates(self):
-        """
-        Fetches a list of all updates that have not
-        been marked as executed
-        :return: list of not executed records
-        """
-        sql = """
-        SELECT update_id, ticket_key, file_name, author, size, created, status FROM Updates where executed = 0;
-        """
-        self.cursor.execute(sql)
-        column_names = [i[0] for i in self.cursor.description]
-        return [dict(zip(column_names, entry)) for entry in self.cursor.fetchall()]
-
-    def fetch_executed_updates(self):
-        """
-        Fetches a list of all updates that have been
-        marked as executed
-        :return: list of executed records
-        """
-        sql = """
-        SELECT update_id, ticket_key, file_name, author, size, created, status FROM Updates where executed = 1;
-        """
-        self.cursor.execute(sql)
-        column_names = [i[0] for i in self.cursor.description]
-        return [dict(zip(column_names, entry)) for entry in self.cursor.fetchall()]
-
-    def set_as_executed(self, update_id):
-        """
-        Sets an update as executed
-        :param update_id: the update_id of the record
-        :return:
-        """
-        sql = """
-        update Updates
-        set executed = 1 where update_id = {};
-        """.format(update_id)
-        self.cursor.execute(sql)
-        self.connection.commit()
-
-    def set_as_not_executed(self, update_id):
-        """
-        Sets an update as not executed
-        :param update_id:
-        :return:
-        """
-        sql = """
-        update Updates
-        set executed = 0 where update_id = {};
-        """.format(update_id)
         self.cursor.execute(sql)
         self.connection.commit()
