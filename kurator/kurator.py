@@ -24,7 +24,8 @@ class NoError(logging.Filter):
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
 
-FORMATTER = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+FORMATTER = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 HANDLER_STDOUT = logging.StreamHandler(sys.stdout)
 HANDLER_STDOUT.setLevel(logging.WARNING)
@@ -49,12 +50,14 @@ def import_media(source, library):
     files = u.find_all_files(source, ('.jpg', '.mp4', '.mov'))
     print('Processing {} photos'.format(len(files)))
     for idx, file_item in enumerate(files):
-        folder_name = os.path.join(library, u.generate_foldername_from_meta(file_item))
+        folder_name = os.path.join(
+            library, u.generate_foldername_from_meta(file_item))
         file_name = u.generate_filename_from_meta(file_item)
         u.create_directory(folder_name)
 
         if os.path.exists(os.path.join(folder_name, file_name)):
-            file_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
+            file_name = '{}_DUP_{}{}'.format(
+                file_name, u.get_time_stamp(), idx)
         file_destination = os.path.join(folder_name, file_name)
         media_id = u.generate_md5(file_item)
         if create_record_if_not_exist(media_id, file_destination) is True:
@@ -114,16 +117,19 @@ def fix_names(target):
     :param target:
     :return:
     """
-    files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
+    files = u.find_all_files(
+        target, ('.jpg', '.mp4', '.mov', '.jpeg', '.png'))
     print('Scanning {} photos'.format(len(files)))
     for idx, file_item in enumerate(files):
-        folder_name = os.path.join(target, u.generate_foldername_from_meta(file_item))
+        folder_name = os.path.join(
+            target, u.generate_foldername_from_meta(file_item))
         file_name = u.generate_filename_from_meta(file_item)
         u.create_directory(folder_name)
         LOGGER.info('Processing file %s', file_name)
 
         if os.path.exists(os.path.join(folder_name, file_name)):
-            file_name = '{}_DUP_{}{}'.format(file_name, u.get_time_stamp(), idx)
+            file_name = '{}_DUP_{}{}'.format(
+                file_name, u.get_time_stamp(), idx)
         copy_file(file_item, os.path.join(folder_name, file_name))
         os.remove(file_item)
 
@@ -137,7 +143,8 @@ def import_to_database(target):
     files = u.find_all_files(target, ('.jpg', '.mp4', '.mov'))
     print('Scanning {} photos'.format(len(files)))
     for file_item in files:
-        folder_name = os.path.join(target, u.generate_foldername_from_meta(file_item))
+        folder_name = os.path.join(
+            target, u.generate_foldername_from_meta(file_item))
         file_name = u.generate_filename_from_meta(file_item)
         if os.path.exists(os.path.join(folder_name, file_name)):
             file_path = os.path.join(folder_name, file_name)
